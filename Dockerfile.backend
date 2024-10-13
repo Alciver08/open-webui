@@ -1,0 +1,29 @@
+# Dockerfile para Backend
+FROM python:3.11-slim-bookworm AS backend
+
+ARG USE_CUDA
+ARG USE_OLLAMA
+ARG USE_CUDA_VER
+ARG USE_EMBEDDING_MODEL
+ARG USE_RERANKING_MODEL
+ARG UID=0
+ARG GID=0
+
+ENV ENV=prod \
+    PORT=8080 \
+    USE_OLLAMA_DOCKER=${USE_OLLAMA} \
+    USE_CUDA_DOCKER=${USE_CUDA} \
+    USE_CUDA_DOCKER_VER=${USE_CUDA_VER} \
+    USE_EMBEDDING_MODEL_DOCKER=${USE_EMBEDDING_MODEL} \
+    USE_RERANKING_MODEL_DOCKER=${USE_RERANKING_MODEL}
+
+WORKDIR /app/backend
+
+COPY backend/requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY backend .
+
+EXPOSE 8080
+
+CMD ["python", "app.py"]
