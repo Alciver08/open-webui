@@ -5,44 +5,44 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.Frontend
-    container_name: frontend
+    image: open-webui-frontend
+    container_name: open-webui-frontend
     ports:
-      - "80:80"
-   # depends_on:
-    #  - backend
+      - "3000:3000"  # Cambia este puerto según sea necesario
     environment:
-      - API_BASE_URL=http://3.236.19.161:8080
-      - OLLAMA_BASE_URL=http://3.234.230.192:11434
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OPENAI_API_KEY=tu_api_key
+      - WEBUI_SECRET_KEY=tu_webui_secret_key # Asegúrate de establecer esta variable de entorno
+      - ANONYMIZED_TELEMETRY=false
+      - SCARF_NO_ANALYTICS=true
+      - DO_NOT_TRACK=true
+      - API_BASE_URL=http://backend:8080
 
   backend:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    container_name: backend
-    ports:
-      - "8080:8080"
+    image: open-webui-backend
+    container_name: open-webui-backend
     environment:
-      - OLLAMA_API_URL=http://3.234.230.192:11434
-      - USE_CUDA=true # O false si no se usa CUDA
-      - USE_CUDA_VER=cu121 # Especifica la versión de CUDA
-      - USE_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-      - USE_RERANKING_MODEL=""
-      - OPENAI_API_KEY=${OPENAI_API_KEY} # Clave para integración con OpenAI
-      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY} # Clave secreta del WebUI
-      - SCARF_NO_ANALYTICS=true
-      - DO_NOT_TRACK=true
-      - ANONYMIZED_TELEMETRY=false
-      - WHISPER_MODEL="base" # Configuración para Whisper
+      - OPENAI_API_KEY=tu_api_key
+      - WEBUI_SECRET_KEY=tu_webui_secret_key # Establecer esta variable de entorno
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WHISPER_MODEL="base"
       - WHISPER_MODEL_DIR="/app/backend/data/cache/whisper/models"
       - RAG_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+      - RAG_RERANKING_MODEL=""
       - SENTENCE_TRANSFORMERS_HOME="/app/backend/data/cache/embedding/models"
-   # depends_on:
-    #  - ollama
+      - HF_HOME="/app/backend/data/cache/embedding/models"
 
   ollama:
-    build:
-      context: .
-      dockerfile: Dockerfile.ollama
+    image: ollama/ollama:latest
     container_name: ollama
-    ports:
-      - "11434:11434"
+    tty: true
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    command: ["ollama", "run", "model_name"]  # Cambia 'model_name' por el que necesites
+
+volumes:
+  ollama: {}
