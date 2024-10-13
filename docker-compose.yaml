@@ -11,8 +11,8 @@ services:
     depends_on:
       - backend
     environment:
-      - API_BASE_URL=http://backend:8080
-      - OLLAMA_BASE_URL=http://ollama:11434
+      - API_BASE_URL=http://3.236.19.161:8080
+      - OLLAMA_BASE_URL=http://3.234.230.192:11434
       - NODE_ENV=production  # Configura el entorno de Node.js como producción
       - APP_BUILD_HASH=dev-build # Para control de versiones del frontend
 
@@ -24,7 +24,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - OLLAMA_API_URL=http://ollama:11434
+      - OLLAMA_API_URL=http://3.234.230.192:11434
       - USE_CUDA=true # O false si no se usa CUDA
       - USE_CUDA_VER=cu121 # Especifica la versión de CUDA
       - USE_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
