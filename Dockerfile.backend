@@ -19,11 +19,11 @@ ENV ENV=prod \
 
 WORKDIR /app/backend
 
-COPY backend/requirements.txt ./
+COPY backend/requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY backend/ .
 
 EXPOSE 8080
 
-CMD ["python", "app.py"]
+CMD ["python", "open_webui/env.py"]  # Cambia este comando según la lógica principal
