@@ -4,17 +4,15 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.frontend
+      dockerfile: Dockerfile.Frontend
     container_name: frontend
     ports:
       - "80:80"
-    depends_on:
-      - backend
+   # depends_on:
+    #  - backend
     environment:
       - API_BASE_URL=http://3.236.19.161:8080
       - OLLAMA_BASE_URL=http://3.234.230.192:11434
-      - NODE_ENV=production  # Configura el entorno de Node.js como producción
-      - APP_BUILD_HASH=dev-build # Para control de versiones del frontend
 
   backend:
     build:
@@ -38,8 +36,8 @@ services:
       - WHISPER_MODEL_DIR="/app/backend/data/cache/whisper/models"
       - RAG_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
       - SENTENCE_TRANSFORMERS_HOME="/app/backend/data/cache/embedding/models"
-    depends_on:
-      - ollama
+   # depends_on:
+    #  - ollama
 
   ollama:
     build:
